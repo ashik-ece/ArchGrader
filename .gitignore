@@ -1,0 +1,24 @@
+# R
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rcheck/
+*.tar.gz
+renv/library/
+renv/staging/
+
+# Quarto
+/.quarto/
+*_cache/
+*_files/
+.quarto/
+
+# Rendered output (regenerated, never committed from assignments)
+inst/assignments/*.html
+
+# Local tooling / OS
+.DS_Store
+
+# Private planning document
+ArchGrader Architectural Blueprint*.pdf

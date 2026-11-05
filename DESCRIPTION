@@ -1,0 +1,21 @@
+Package: ArchGrader
+Title: Deterministic Rubric-Based Grading of Quarto Assignments
+Version: 0.0.0.9000
+Authors@R: 
+    person("John", email = "ashikece8@gmail.com", role = c("aut", "cre"))
+Description: Grades student Quarto (.qmd) assignments in R against a YAML
+    rubric by running each submission in a clean R process, comparing
+    named result objects to an instructor solution, and rendering
+    plain-language feedback reports. No LLM, no randomness: the same
+    rubric and inputs always give the same score.
+License: MIT + file LICENSE
+Config/roxygen2/version: 8.1.1
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Suggests: 
+    dplyr,
+    ggplot2,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

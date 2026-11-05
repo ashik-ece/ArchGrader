@@ -1,0 +1,7 @@
+^LICENSE\.md$
+^docs$
+^data-raw$
+^results$
+^\.github$
+^\.quarto$
+^ArchGrader Architectural Blueprint & Execution Plan\.pdf$

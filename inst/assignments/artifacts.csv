@@ -1,0 +1,151 @@
+"artifact_id","site","raw_material","length_mm","width_mm","thickness_mm"
+"A001","Ridge Camp","chert",37.1,25.1,7
+"A002","River Terrace","quartzite",55.2,36.7,11.9
+"A003","Ridge Camp","quartzite",44.8,30.9,11.9
+"A004","Cave Mouth","chert",31.4,21.7,8.7
+"A005","Ridge Camp","basalt",45.6,22.5,7.7
+"A006","Hilltop","basalt",45.6,31.7,10
+"A007","Cave Mouth","quartzite",42.6,31.2,10.2
+"A008","River Terrace","basalt",51.6,34.9,9.3
+"A009","Ridge Camp","chert",42.4,30.3,10.5
+"A010","River Terrace","basalt",44.3,23,7.7
+"A011","Ridge Camp","quartzite",38.1,24.7,9.7
+"A012","Ridge Camp","chert",39.1,28.7,7.7
+"A013","Hilltop","basalt",43.6,32.6,11.8
+"A014","River Terrace","obsidian",33.7,22.8,8.7
+"A015","Ridge Camp","obsidian",33.9,20.7,8
+"A016","Cave Mouth","quartzite",31.8,20.4,7.5
+"A017","River Terrace","chert",42.3,29.8,10.7
+"A018","Hilltop","chert",45.1,27.9,7.7
+"A019","Hilltop","quartzite",45.8,28.3,10.6
+"A020","Ridge Camp","basalt",40.3,29.7,10.2
+"A021","Ridge Camp","chert",36.3,20.6,7.1
+"A022","Ridge Camp","basalt",39.2,25.9,7.8
+"A023","Ridge Camp","chert",35.7,24.5,9.5
+"A024","Ridge Camp","quartzite",50.1,30.8,9.2
+"A025","Cave Mouth","obsidian",29.6,15.5,6.2
+"A026","Ridge Camp","chert",45.3,31.5,10.7
+"A027","River Terrace","basalt",38.9,33.6,11.1
+"A028","Ridge Camp","quartzite",38,26.4,8.3
+"A029","Ridge Camp","basalt",33.4,21.9,6.4
+"A030","Ridge Camp","chert",20.1,16.6,5.2
+"A031","River Terrace","obsidian",42.9,25,7.4
+"A032","Ridge Camp","obsidian",36.5,20.4,7.7
+"A033","River Terrace","chert",41.3,28.6,7.2
+"A034","Cave Mouth","obsidian",29.5,19.5,6.1
+"A035","Hilltop","quartzite",32.1,25.1,9.2
+"A036","Cave Mouth","basalt",40.7,29.1,10
+"A037","River Terrace","chert",34.7,25.6,7.6
+"A038","Hilltop","chert",47.4,29.8,8.5
+"A039","Ridge Camp","chert",46.1,28.2,10.5
+"A040","Cave Mouth","quartzite",39.4,26.9,9.3
+"A041","River Terrace","obsidian",35.2,22.5,7.2
+"A042","River Terrace","basalt",45.8,30.6,7.6
+"A043","Hilltop","chert",43.7,30.7,11.3
+"A044","Ridge Camp","quartzite",38.1,28.1,8.6
+"A045","River Terrace","obsidian",43.4,33.5,13.1
+"A046","Ridge Camp","basalt",38.9,25,8
+"A047","Ridge Camp","chert",41.1,31.1,8.8
+"A048","River Terrace","basalt",50.4,34.8,8.6
+"A049","River Terrace","basalt",42.4,25.4,9.7
+"A050","Hilltop","quartzite",38.7,25.4,8.9
+"A051","River Terrace","basalt",44.3,26.2,8.5
+"A052","Ridge Camp","chert",39.2,26,7.2
+"A053","Cave Mouth","quartzite",31.9,21.8,8.3
+"A054","Ridge Camp","chert",38.8,21.8,7.5
+"A055","Hilltop","obsidian",41.7,27.2,5.7
+"A056","Ridge Camp","obsidian",30.3,22.9,6.7
+"A057","Cave Mouth","chert",29.3,19.5,7.3
+"A058","River Terrace","obsidian",53.4,33.9,10.4
+"A059","Cave Mouth","chert",32.6,23.3,7.5
+"A060","River Terrace","quartzite",41.3,23,7.9
+"A061","Hilltop","quartzite",44.9,29.9,11.8
+"A062","Cave Mouth","quartzite",29.1,25.3,9.2
+"A063","River Terrace","chert",41.8,29.1,6.7
+"A064","Ridge Camp","obsidian",47.2,31.2,10.1
+"A065","Ridge Camp","chert",43.7,27.6,9.6
+"A066","Ridge Camp","obsidian",25.2,19.6,7.2
+"A067","Ridge Camp","obsidian",30.1,23.4,8.2
+"A068","Hilltop","obsidian",48.9,30.8,10.4
+"A069","Hilltop","chert",38.5,24.8,7.8
+"A070","Cave Mouth","obsidian",28.3,19.3,6.8
+"A071","Hilltop","quartzite",40.7,28.1,10.4
+"A072","Cave Mouth","chert",29.3,19.9,7.6
+"A073","Ridge Camp","obsidian",32.3,24.6,8.7
+"A074","Cave Mouth","quartzite",46.6,33.8,9.3
+"A075","Cave Mouth","chert",46.2,31.8,10.1
+"A076","River Terrace","quartzite",43.6,34.2,9.9
+"A077","Hilltop","quartzite",38.3,33.4,9.7
+"A078","Ridge Camp","chert",30.3,24.2,7.5
+"A079","Hilltop","basalt",52,29.1,8
+"A080","Ridge Camp","obsidian",30.1,23.1,9.6
+"A081","Cave Mouth","chert",44.4,32,11.6
+"A082","Ridge Camp","obsidian",41.2,27.7,10.3
+"A083","River Terrace","obsidian",34.8,20.6,6.8
+"A084","Hilltop","quartzite",37,27.2,6.7
+"A085","Cave Mouth","basalt",33.7,18.7,7.6
+"A086","Cave Mouth","chert",30.9,22.1,8.3
+"A087","Cave Mouth","quartzite",38.9,25.6,6.9
+"A088","Cave Mouth","chert",30.9,22.2,5
+"A089","River Terrace","obsidian",38.8,23,9.5
+"A090","Cave Mouth","chert",36.9,25.7,10.3
+"A091","River Terrace","obsidian",44,29.8,9.2
+"A092","Cave Mouth","basalt",44.1,25.1,9.1
+"A093","River Terrace","chert",35.9,25.7,8.2
+"A094","River Terrace","chert",47.1,29.3,6.5
+"A095","Hilltop","quartzite",46.9,28.8,7.6
+"A096","River Terrace","chert",40.8,26.7,10.1
+"A097","Ridge Camp","chert",31.1,22.5,7.8
+"A098","Ridge Camp","chert",31.5,21.2,7.4
+"A099","Ridge Camp","chert",29.2,17.1,7.6
+"A100","Ridge Camp","basalt",36.9,26.6,8.1
+"A101","Ridge Camp","chert",41.9,27.9,8.5
+"A102","Ridge Camp","chert",41,25.3,5.6
+"A103","Cave Mouth","quartzite",38.4,26.1,10.3
+"A104","River Terrace","basalt",50.4,32.4,10.6
+"A105","River Terrace","quartzite",41.9,26.1,7.8
+"A106","River Terrace","quartzite",46.1,33.4,12.1
+"A107","Ridge Camp","chert",36.7,27.1,9.5
+"A108","Ridge Camp","quartzite",49.5,30.8,9.8
+"A109","Hilltop","chert",35.2,21.6,5.7
+"A110","Hilltop","basalt",41.6,28.9,7.1
+"A111","Hilltop","obsidian",41.3,23.7,8.5
+"A112","Hilltop","quartzite",43.5,22.8,7.3
+"A113","River Terrace","obsidian",28.7,15.3,4.5
+"A114","Cave Mouth","quartzite",49.8,29.6,9.6
+"A115","Hilltop","quartzite",34.9,17.7,7.7
+"A116","Hilltop","chert",30.8,17.1,5.9
+"A117","Hilltop","chert",35.8,24.8,6.6
+"A118","River Terrace","quartzite",49.2,32.5,10.1
+"A119","Ridge Camp","obsidian",29.1,17.7,5
+"A120","Cave Mouth","obsidian",30,18.6,6.5
+"A121","Ridge Camp","chert",42,23.7,10.3
+"A122","Ridge Camp","quartzite",46.2,30.2,9.4
+"A123","Hilltop","quartzite",49.3,31.7,10.8
+"A124","Ridge Camp","obsidian",28.7,17.7,5.7
+"A125","River Terrace","chert",37.4,21.5,5.8
+"A126","River Terrace","obsidian",43.8,27.3,8.6
+"A127","Hilltop","chert",38.2,25.1,8.7
+"A128","River Terrace","chert",41.8,26.5,7.9
+"A129","Cave Mouth","chert",34.7,23.5,8.4
+"A130","River Terrace","obsidian",38.5,27.5,8.4
+"A131","Ridge Camp","quartzite",37.3,23.8,9.4
+"A132","Ridge Camp","chert",41,20.2,8
+"A133","Ridge Camp","quartzite",40.9,31,9.5
+"A134","Ridge Camp","chert",31.2,19.2,6.5
+"A135","Cave Mouth","quartzite",32.9,20.7,7.6
+"A136","Cave Mouth","chert",30.3,21,5
+"A137","Ridge Camp","quartzite",40.8,27.2,8.4
+"A138","River Terrace","quartzite",52.1,39.7,11.8
+"A139","Cave Mouth","chert",41.6,29.1,11.9
+"A140","Hilltop","basalt",42.1,30,9.7
+"A141","River Terrace","chert",28.2,25,7.1
+"A142","Ridge Camp","chert",30.8,21.9,8.3
+"A143","Ridge Camp","chert",40.7,27.9,8.2
+"A144","Ridge Camp","quartzite",45,35.3,10.5
+"A145","Cave Mouth","obsidian",31.4,19.8,8.7
+"A146","River Terrace","chert",42.5,24.6,4.9
+"A147","Ridge Camp","basalt",31.6,17.7,6
+"A148","River Terrace","chert",32.1,20.9,9.3
+"A149","Ridge Camp","chert",37.7,26.6,9.6
+"A150","Cave Mouth","quartzite",36.2,28.9,9

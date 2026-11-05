@@ -1,0 +1,50 @@
+---
+title: "Assignment 1: Summary Statistics of Lithic Artifacts (Instructor Solution)"
+format: html
+---
+
+Instructor solution. The grader runs this file once, caches the objects it
+creates, and compares each student's objects against them. Do not hand this
+file out. See `docs/conventions.md` for the required object names.
+
+```{r load-data}
+artifacts <- read.csv("artifacts.csv")
+```
+
+## Task 1: Overall mean and standard deviation of length
+
+```{r overall-stats}
+mean_length <- mean(artifacts$length_mm)
+sd_length <- sd(artifacts$length_mm)
+```
+
+## Task 2: Median length by site
+
+```{r median-by-site}
+median_by_site <- artifacts |>
+  dplyr::group_by(site) |>
+  dplyr::summarise(median_length = median(length_mm), .groups = "drop") |>
+  as.data.frame()
+```
+
+## Task 3: Count of artifacts by raw material
+
+```{r count-by-material}
+count_by_material <- artifacts |>
+  dplyr::count(raw_material) |>
+  as.data.frame()
+```
+
+## Task 4: Summary table by site
+
+```{r summary-table}
+summary_table <- artifacts |>
+  dplyr::group_by(site) |>
+  dplyr::summarise(
+    n = dplyr::n(),
+    mean_length = mean(length_mm),
+    sd_length = sd(length_mm),
+    .groups = "drop"
+  ) |>
+  as.data.frame()
+```
