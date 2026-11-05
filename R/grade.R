@@ -7,6 +7,11 @@
 #' The instructor solution is run once and cached for the session, so grading
 #' many submissions only pays for the solution once.
 #'
+#' A submission that cannot be run at all (for example a damaged file) still
+#' returns a normal result: every criterion scores zero and `error` is `TRUE`.
+#' Problems on the instructor's side (a broken rubric or solution) stop with
+#' an error instead, because they would affect every student.
+#'
 #' @param submission Path to the student's `.qmd`.
 #' @param assignment Assignment name, such as `"a1"`. Selects the rubric
 #'   `inst/rubrics/<assignment>.yaml` shipped with the package.
@@ -26,21 +31,18 @@
 grade_submission <- function(submission, assignment = "a1", rubric = NULL,
                              solution = NULL, data_dir = NULL, timeout = NULL) {
   start <- proc.time()[["elapsed"]]
-
-  assignments_dir <- system.file("assignments", package = "ArchGrader")
-  if (is.null(rubric)) {
-    rubric <- system.file("rubrics", paste0(assignment, ".yaml"), package = "ArchGrader")
-    if (!nzchar(rubric)) {
-      stop("No packaged rubric for assignment '", assignment, "'.", call. = FALSE)
-    }
+  if (!is.character(submission) || length(submission) != 1 || !file.exists(submission)) {
+    stop("Submission file not found: ", format(submission), call. = FALSE)
   }
-  rub <- load_rubric(rubric)
-  if (is.null(data_dir)) data_dir <- assignments_dir
-  if (is.null(solution)) solution <- file.path(assignments_dir, rub$solution)
-  if (is.null(timeout)) timeout <- rub$timeout %||% 30
 
-  reference <- get_reference(solution, data_dir = data_dir, timeout = timeout)
-  student <- run_submission(submission, data_dir = data_dir, timeout = timeout)
+  setup <- resolve_assignment(assignment, rubric, solution, data_dir, timeout)
+  rub <- setup$rubric
+  reference <- get_reference(setup$solution, data_dir = setup$data_dir, timeout = setup$timeout)
+
+  student <- tryCatch(
+    run_submission(submission, data_dir = setup$data_dir, timeout = setup$timeout),
+    error = function(e) unreadable_run(conditionMessage(e))
+  )
 
   results <- lapply(rub$criteria, run_check, student = student, reference = reference)
   scored <- score_criteria(rub, results)
@@ -60,6 +62,37 @@ grade_submission <- function(submission, assignment = "a1", rubric = NULL,
       seconds = proc.time()[["elapsed"]] - start
     ),
     class = "archgrader_result"
+  )
+}
+
+# Locate and load the rubric, solution and data for an assignment. Rubric
+# problems stop here, before any student is graded.
+resolve_assignment <- function(assignment, rubric = NULL, solution = NULL,
+                               data_dir = NULL, timeout = NULL) {
+  assignments_dir <- system.file("assignments", package = "ArchGrader")
+  if (is.null(rubric)) {
+    rubric <- system.file("rubrics", paste0(assignment, ".yaml"), package = "ArchGrader")
+    if (!nzchar(rubric)) {
+      stop("No packaged rubric for assignment '", assignment, "'.", call. = FALSE)
+    }
+  }
+  rub <- load_rubric(rubric)
+  list(
+    rubric = rub,
+    data_dir = data_dir %||% assignments_dir,
+    solution = solution %||% file.path(assignments_dir, rub$solution),
+    timeout = timeout %||% rub$timeout %||% 30
+  )
+}
+
+# What the checks see when a file could not be run at all. Everything scores
+# zero and the report shows the problem.
+unreadable_run <- function(message) {
+  list(
+    objects = list(), object_chunk = character(),
+    error = paste0("The submission file could not be read: ", message),
+    error_chunk = NULL, timed_out = FALSE, elapsed = 0,
+    chunks = character(), code = ""
   )
 }
 

@@ -2,6 +2,8 @@
 
 S3method(print,archgrader_result)
 S3method(print,archgrader_rubric)
+export(grade_folder)
 export(grade_submission)
 export(load_rubric)
 export(run_submission)
+export(write_feedback)

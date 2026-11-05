@@ -5,3 +5,4 @@
 ^\.github$
 ^\.quarto$
 ^ArchGrader Architectural Blueprint & Execution Plan\.pdf$
+^grading-output$

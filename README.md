@@ -25,6 +25,29 @@ The result also holds the per-criterion notes (observed versus expected
 values and the chunk to revisit). See [`docs/rubric-format.md`](docs/rubric-format.md)
 for how a rubric is written.
 
+## Grade a folder
+
+```r
+grade_folder("path/to/submissions", assignment = "a1", output_dir = "grading-output")
+#> ArchGrader batch summary
+#>   Graded:         8 submissions
+#>   Average score:  52.71 / 100 (52.7%)
+#>   With errors:    1
+#>   Total time:     8 s (median 0.93 s per submission)
+#>   Scores:         grading-output/scores.csv
+#>   Reports:        grading-output/reports/
+```
+
+This writes `scores.csv` (student ID, total, one column per criterion, error
+flag, failing chunk, seconds) and one self-contained HTML feedback report per
+student in `reports/`. A crashing, looping or unreadable submission becomes a
+normal row and report; it never stops the batch. Re-running the same folder
+gives an identical CSV apart from the `seconds` column.
+
+Feedback reports are rendered with Quarto, which must be installed and on the
+`PATH` (use `reports = FALSE` to skip them). Feedback is assembled from the
+rubric's comments, not generated, so identical mistakes get identical feedback.
+
 ## Folder layout
 
 | Folder | Contents |

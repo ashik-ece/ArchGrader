@@ -164,7 +164,12 @@ clean_crash_message <- function(e) {
 # Pull the R chunks out of a .qmd as an ordered, named list of code strings.
 # Names are the chunk labels.
 extract_chunks <- function(path) {
-  lines <- readLines(path, warn = FALSE, encoding = "UTF-8")
+  lines <- readLines(path, warn = FALSE)
+  # Files saved by other editors are often Latin-1 (for example "cafe-with-accent" from
+  # a Windows machine). Anything that is not valid UTF-8 is read as Latin-1,
+  # which never fails, so one odd file cannot stop a batch.
+  if (!all(validUTF8(lines))) lines <- iconv(lines, from = "latin1", to = "UTF-8", sub = "?")
+  Encoding(lines) <- "UTF-8"
   lines <- move_option_labels_to_headers(lines)
 
   src <- tempfile(fileext = ".qmd")

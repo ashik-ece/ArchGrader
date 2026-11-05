@@ -22,3 +22,4 @@ inst/assignments/*.html
 
 # Private planning document
 ArchGrader Architectural Blueprint*.pdf
+grading-output/

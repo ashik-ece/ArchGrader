@@ -20,6 +20,9 @@ CRITERION_REQUIRED  <- c("id", "description", "points", "check")
 CRITERION_OPTIONAL  <- c("params", "comments", "hint")
 COMMENT_KEYS        <- c("pass", "partial", "fail")
 
+# Column names scores.csv uses for itself; a criterion id must not clash.
+RESERVED_IDS <- c("student_id", "total", "error", "error_chunk", "seconds")
+
 # Placeholders the feedback report fills in from the check results.
 PLACEHOLDERS <- c("object", "observed", "expected", "chunk")
 
@@ -121,6 +124,9 @@ validate_rubric <- function(x) {
 
     if ("id" %in% names(cr) && !(is_string(cr$id) && grepl("^[A-Za-z][A-Za-z0-9_]*$", cr$id))) {
       cadd("'id' must start with a letter and use only letters, digits and underscores")
+    } else if (is_string(cr$id) && cr$id %in% RESERVED_IDS) {
+      cadd("'id' cannot be '", cr$id, "' because scores.csv already has a column with that name. ",
+           "Reserved: ", paste(RESERVED_IDS, collapse = ", "))
     }
     if ("description" %in% names(cr) && !is_string(cr$description)) {
       cadd("'description' must be a non-empty text value")

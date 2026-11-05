@@ -45,4 +45,9 @@ and the feedback report are built on this function.
 \details{
 The instructor solution is run once and cached for the session, so grading
 many submissions only pays for the solution once.
+
+A submission that cannot be run at all (for example a damaged file) still
+returns a normal result: every criterion scores zero and \code{error} is \code{TRUE}.
+Problems on the instructor's side (a broken rubric or solution) stop with
+an error instead, because they would affect every student.
 }

@@ -59,6 +59,14 @@ test_that("criterion ids must be unique", {
   expect_error(load_rubric(write_rubric(r)), "duplicate criterion id\\(s\\): x")
 })
 
+test_that("criterion ids cannot clash with scores.csv columns", {
+  for (id in c("total", "seconds", "error", "student_id", "error_chunk")) {
+    r <- rubric_list()
+    r$criteria[[1]]$id <- id
+    expect_error(load_rubric(write_rubric(r)), paste0("'id' cannot be '", id, "'"))
+  }
+})
+
 test_that("check parameters are validated", {
   r <- rubric_list()
   r$criteria[[1]]$params$tolerence <- 1
