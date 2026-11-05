@@ -7,6 +7,24 @@ produce the same score.
 
 > Work in progress. This README is a stub and will be finished in Phase 5.
 
+## Grade one submission
+
+```r
+devtools::load_all()   # or library(ArchGrader) once installed
+grade_submission("inst/mock_submissions/a1/a1_partial_table.qmd", assignment = "a1")
+#> ArchGrader: a1_partial_table | Assignment 1: Summary Statistics of Lithic Artifacts
+#>  criterion         status  credit points
+#>  renders           pass    1.00   10.00/10
+#>  ...
+#>  summary_table     partial 0.67   16.67/25
+#>
+#> Score: 91.67 / 100 (91.67%)
+```
+
+The result also holds the per-criterion notes (observed versus expected
+values and the chunk to revisit). See [`docs/rubric-format.md`](docs/rubric-format.md)
+for how a rubric is written.
+
 ## Folder layout
 
 | Folder | Contents |

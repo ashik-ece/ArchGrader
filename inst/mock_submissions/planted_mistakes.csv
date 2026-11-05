@@ -1,0 +1,5 @@
+assignment,submission,mistake,error_chunk
+a1,a1_wrong_mean,mean_length computed with median() instead of mean(),
+a1,a1_missing_object,count_by_material saved under the wrong name (material_counts),
+a1,a1_error_in_chunk,typo lenght_mm in the median-by-site chunk throws an error,median-by-site
+a1,a1_partial_table,sd_length column of summary_table computed with var() instead of sd(),

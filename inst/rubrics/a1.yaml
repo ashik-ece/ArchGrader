@@ -1,0 +1,90 @@
+# Rubric for Assignment 1: summary statistics of lithic artifacts.
+#
+# Placeholders available in comments and hints: {object}, {observed},
+# {expected}, {chunk}. The grader fills them in from the check result.
+# Changing a criterion, its points or its wording never means touching R code.
+
+assignment: a1
+title: "Assignment 1: Summary Statistics of Lithic Artifacts"
+solution: a1_solution.qmd
+timeout: 30
+total_points: 100
+
+criteria:
+  - id: renders
+    description: "The document runs from top to bottom without errors"
+    points: 10
+    check: renders
+    comments:
+      pass: "Your code ran from top to bottom without errors."
+      partial: "Part of your code ran, but it did not finish."
+      fail: "Your code stopped with an error in chunk `{chunk}`: {observed}"
+    hint: "Fix the error in chunk `{chunk}` first. Code after an error does not run, so the answers after it cannot be checked."
+
+  - id: mean_length
+    description: "Overall mean of artifact length"
+    points: 15
+    check: value
+    params:
+      object: mean_length
+      tolerance: 0.01
+    comments:
+      pass: "Correct: `{object}` is {observed}."
+      partial: "`{object}` is partly right: {observed}; expected {expected}."
+      fail: "`{object}` is {observed}, but the expected value is {expected}."
+    hint: "Compute the mean of the `length_mm` column of `artifacts` and save it as `{object}`. Check chunk `{chunk}`."
+
+  - id: sd_length
+    description: "Overall standard deviation of artifact length"
+    points: 15
+    check: value
+    params:
+      object: sd_length
+      tolerance: 0.01
+    comments:
+      pass: "Correct: `{object}` is {observed}."
+      partial: "`{object}` is partly right: {observed}; expected {expected}."
+      fail: "`{object}` is {observed}, but the expected value is {expected}."
+    hint: "Compute the standard deviation of the `length_mm` column and save it as `{object}`. Check chunk `{chunk}`."
+
+  - id: median_by_site
+    description: "Median length for each site"
+    points: 20
+    check: value
+    params:
+      object: median_by_site
+      tolerance: 0.01
+      key: site
+    comments:
+      pass: "Correct: `{object}` has the right median length for every site."
+      partial: "`{object}` is partly right: some sites or columns are wrong or missing."
+      fail: "`{object}` does not match the expected table."
+    hint: "Group `artifacts` by `site` and take the median of `length_mm`. Save a data frame with columns `site` and `median_length` as `{object}`. Check chunk `{chunk}`."
+
+  - id: count_by_material
+    description: "Number of artifacts for each raw material"
+    points: 15
+    check: value
+    params:
+      object: count_by_material
+      tolerance: 0
+      key: raw_material
+    comments:
+      pass: "Correct: `{object}` has the right count for every raw material."
+      partial: "`{object}` is partly right: some materials or columns are wrong or missing."
+      fail: "`{object}` does not match the expected table."
+    hint: "Count the rows for each `raw_material`. Save a data frame with columns `raw_material` and `n` as `{object}`. Check chunk `{chunk}`."
+
+  - id: summary_table
+    description: "Summary table by site (n, mean length, sd of length)"
+    points: 25
+    check: value
+    params:
+      object: summary_table
+      tolerance: 0.01
+      key: site
+    comments:
+      pass: "Correct: `{object}` has the right summary for every site."
+      partial: "`{object}` is partly right: some values or columns are wrong or missing."
+      fail: "`{object}` does not match the expected table."
+    hint: "Build one table with a row per site and the columns `site`, `n`, `mean_length` and `sd_length`, and save it as `{object}`. Check chunk `{chunk}`."

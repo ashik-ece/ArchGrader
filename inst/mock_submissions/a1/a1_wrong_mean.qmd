@@ -1,0 +1,85 @@
+---
+title: "Assignment 1: Summary Statistics of Lithic Artifacts"
+format: html
+---
+
+## Background
+
+You have been given measurements of 150 stone artifacts from four
+archaeological sites. Each row of `artifacts.csv` is one artifact:
+
+| Column | Meaning |
+|---|---|
+| `artifact_id` | Unique artifact label |
+| `site` | Site where the artifact was found |
+| `raw_material` | Stone type (chert, obsidian, quartzite, basalt) |
+| `length_mm`, `width_mm`, `thickness_mm` | Measurements in millimetres |
+
+**How this assignment is graded.** Your results are checked by saving them
+under *exact object names*. Each task below tells you which name to use.
+Spelling and capitalisation matter. Leave the chunk labels (the name after `r`
+in each ` ```{r name} ` line) as they are, because feedback points you to the
+chunk to revisit.
+You may use base R or `dplyr`, whichever you prefer.
+
+```{r load-data}
+artifacts <- read.csv("artifacts.csv")
+```
+
+## Task 1: Overall mean and standard deviation of length
+
+Compute the overall mean and the standard deviation of `length_mm` across all
+artifacts.
+
+Save the mean as **`mean_length`** and the standard deviation as
+**`sd_length`**. Each is a single number.
+
+```{r overall-stats}
+mean_length <- median(artifacts$length_mm)
+sd_length <- sd(artifacts$length_mm)
+```
+
+## Task 2: Median length by site
+
+Compute the median `length_mm` for each site.
+
+Save the result as **`median_by_site`**, a data frame with two columns named
+**`site`** and **`median_length`**, one row per site.
+
+```{r median-by-site}
+median_by_site <- aggregate(length_mm ~ site, data = artifacts, FUN = median)
+names(median_by_site)[2] <- "median_length"
+```
+
+## Task 3: Count of artifacts by raw material
+
+Count how many artifacts are made of each raw material.
+
+Save the result as **`count_by_material`**, a data frame with two columns
+named **`raw_material`** and **`n`**, one row per raw material.
+
+```{r count-by-material}
+count_by_material <- as.data.frame(table(artifacts$raw_material))
+names(count_by_material) <- c("raw_material", "n")
+```
+
+## Task 4: Summary table by site
+
+Build one summary table with a row for each site and these columns, named
+exactly as shown:
+
+- **`site`**: the site name
+- **`n`**: the number of artifacts
+- **`mean_length`**: mean of `length_mm`
+- **`sd_length`**: standard deviation of `length_mm`
+
+Save the result as **`summary_table`**, a data frame.
+
+```{r summary-table}
+summary_table <- data.frame(
+  site = sort(unique(artifacts$site)),
+  n = as.vector(table(artifacts$site)),
+  mean_length = as.vector(tapply(artifacts$length_mm, artifacts$site, mean)),
+  sd_length = as.vector(tapply(artifacts$length_mm, artifacts$site, sd))
+)
+```
