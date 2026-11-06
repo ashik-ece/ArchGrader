@@ -1,0 +1,25 @@
+---
+title: "Assignment 2: Visualizing Lithic Artifact Measurements (Instructor Solution)"
+format: html
+---
+
+Instructor solution. The grader runs this file once and uses it to confirm the
+rubric's object names. Do not hand this file out. See `docs/conventions.md`.
+
+```{r load-data}
+library(ggplot2)
+artifacts <- read.csv("artifacts.csv")
+```
+
+## Task 1: Length against width, by raw material
+
+```{r scatter-plot}
+length_width_plot <- ggplot(artifacts, aes(x = length_mm, y = width_mm, colour = raw_material)) +
+  geom_point() +
+  labs(
+    x = "Length (mm)",
+    y = "Width (mm)",
+    colour = "Raw material",
+    title = "Artifact length against width"
+  )
+```

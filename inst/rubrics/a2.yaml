@@ -1,0 +1,96 @@
+# Rubric for Assignment 2: visualizing artifact measurements.
+#
+# The plot is checked by inspecting the ggplot object: its layers (geometry),
+# its aesthetic mappings and its labels. Nothing is drawn. Placeholders in
+# comments and hints: {object}, {observed}, {expected}, {chunk}.
+
+assignment: a2
+title: "Assignment 2: Visualizing Lithic Artifact Measurements"
+solution: a2_solution.qmd
+timeout: 30
+total_points: 100
+
+criteria:
+  - id: renders
+    description: "The document runs from top to bottom without errors"
+    points: 10
+    check: renders
+    comments:
+      pass: "Your code ran from top to bottom without errors."
+      partial: "Part of your code ran, but it did not finish."
+      fail: "Your code stopped with an error in chunk `{chunk}`: {observed}"
+    hint: "Fix the error in chunk `{chunk}` first. Code after an error does not run, so the plot cannot be checked."
+
+  - id: points_layer
+    description: "The figure is a scatter plot (one point per artifact)"
+    points: 20
+    check: plot
+    params:
+      object: length_width_plot
+      geom: point
+    comments:
+      pass: "Correct: `{object}` draws points."
+      partial: "`{object}` is partly right."
+      fail: "`{object}` does not draw points."
+    hint: "Add `geom_point()` to your plot and save the plot as `{object}`. Check chunk `{chunk}`."
+
+  - id: axes_mapped
+    description: "Length is on the x axis and width is on the y axis"
+    points: 20
+    check: plot
+    params:
+      object: length_width_plot
+      mapping:
+        x: length_mm
+        y: width_mm
+    comments:
+      pass: "Correct: length is on the x axis and width is on the y axis."
+      partial: "One of the two axes shows the wrong measurement."
+      fail: "Neither axis shows the measurement the task asks for."
+    hint: "Map `length_mm` to x and `width_mm` to y inside `aes()`. Check chunk `{chunk}`."
+
+  - id: colour_mapped
+    description: "Points are coloured by raw material"
+    points: 15
+    check: plot
+    params:
+      object: length_width_plot
+      mapping:
+        colour: raw_material
+    comments:
+      pass: "Correct: the points are coloured by raw material."
+      partial: "The colouring is partly right."
+      fail: "The points are not coloured by raw material."
+    hint: "Map `raw_material` to colour inside `aes()`, for example `colour = raw_material`. Check chunk `{chunk}`."
+
+  - id: axis_labels
+    description: "Both axes have a descriptive label"
+    points: 15
+    check: plot
+    params:
+      object: length_width_plot
+      labels: [x, y]
+    comments:
+      pass: "Correct: both axes have a descriptive label."
+      partial: "One axis has a descriptive label and the other still shows the column name."
+      fail: "Both axes still show the column names instead of descriptive labels."
+    hint: "Use `labs(x = ..., y = ...)` to say what is measured and the unit, for example \"Length (mm)\". Check chunk `{chunk}`."
+
+  - id: title
+    description: "The plot has a title"
+    points: 10
+    check: plot
+    params:
+      object: length_width_plot
+      labels: [title]
+    comments:
+      pass: "Correct: the plot has a title."
+      partial: "The title is partly right."
+      fail: "The plot has no title."
+    hint: "Add a title with `labs(title = ...)` or `ggtitle()`. Check chunk `{chunk}`."
+
+  - id: readability
+    description: "Overall readability and good practice of the figure"
+    points: 10
+    check: manual
+    hint: "Are the points legible (size, overlap, colours distinguishable)? Is the legend clear? Does the title say what the figure shows?"

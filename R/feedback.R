@@ -171,8 +171,9 @@ build_feedback_model <- function(result) {
     lost <- row$status %in% c("partial", "fail")
 
     # Show the grader's detail only when the comment does not already say it.
+    # (For `renders` the comment already carries the error message.)
     uses_values <- grepl("\\{(observed|expected)\\}", comment_template)
-    details <- if (lost && row$check == "value" && !uses_values) escape_mixed(row$note) else NULL
+    details <- if (lost && row$check != "renders" && !uses_values) escape_mixed(row$note) else NULL
 
     hint <- if (lost) fill_text(cr$hint, values) else NULL
     mentions_chunk <- !is.null(cr$hint) && grepl("\\{chunk\\}", cr$hint)

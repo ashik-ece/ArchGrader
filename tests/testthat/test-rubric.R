@@ -109,3 +109,82 @@ test_that("missing or malformed files fail clearly", {
   writeLines(c("criteria: [unclosed", "  - x: : :"), bad)
   expect_error(load_rubric(bad), "not valid YAML")
 })
+
+test_that("bare y, n, yes, no, on and off stay text, only true/false are booleans", {
+  r <- rubric_list()
+  r$criteria[[1]] <- list(
+    id = "p", description = "Plot", points = 10, check = "plot",
+    params = list(object = "p", mapping = list(x = "len", y = "wid"), labels = c("x", "y")),
+    comments = list(pass = "a", partial = "b", fail = "c"), hint = "h")
+  path <- write_rubric(r)
+  # write_yaml quotes "y", so write the risky form by hand
+  txt <- readLines(path)
+  txt <- gsub("'y'", "y", gsub("\"y\"", "y", txt, fixed = TRUE), fixed = TRUE)
+  writeLines(txt, path)
+  expect_true(any(grepl("(^|\\s)y(:|$)", readLines(path))))
+  rub <- load_rubric(path)
+  p <- rub$criteria[[1]]$params
+  expect_named(p$mapping, c("x", "y"))
+  expect_equal(unlist(p$labels), c("x", "y"))
+})
+
+test_that("only true and false become booleans in a rubric", {
+  yml <- withr::local_tempfile(fileext = ".yaml")
+  writeLines(c(
+    "assignment: t", "title: T", "solution: s.qmd", "total_points: 5",
+    "criteria:",
+    "  - id: tm", "    description: d", "    points: 5", "    check: text_mentions",
+    "    params:", "      heading: H", "      groups:", "        yesno: [yes, no, on, off, y, n]",
+    "    comments: {pass: a, partial: b, fail: c}", "    hint: h"), yml)
+  rub <- load_rubric(yml)
+  expect_equal(unlist(rub$criteria[[1]]$params$groups$yesno), c("yes", "no", "on", "off", "y", "n"))
+  yml2 <- withr::local_tempfile(fileext = ".yaml")
+  writeLines(c(
+    "assignment: t", "title: T", "solution: s.qmd", "total_points: 5",
+    "criteria:",
+    "  - id: v", "    description: d", "    points: 5", "    check: value",
+    "    params: {object: x, tolerance: 0.1, ignore_sign: true}",
+    "    comments: {pass: a, partial: b, fail: c}", "    hint: h"), yml2)
+  expect_identical(load_rubric(yml2)$criteria[[1]]$params$ignore_sign, TRUE)
+})
+
+test_that("plot parameters are validated", {
+  dir <- withr::local_tempdir()
+  mk <- function(params) {
+    r <- rubric_list()
+    r$criteria[[1]] <- list(id = "p", description = "P", points = 10, check = "plot",
+                            params = params,
+                            comments = list(pass = "a", partial = "b", fail = "c"), hint = "h")
+    write_rubric(r, dir = dir)
+  }
+  expect_error(load_rubric(mk(list(object = "p"))), "needs at least one of: geom, mapping, labels")
+  expect_error(load_rubric(mk(list(object = "p", geom = "point", colour = "x"))), "unknown parameter\\(s\\) for check 'plot': colour")
+  expect_error(load_rubric(mk(list(object = "p", labels = c("x", "ttle")))), "param 'labels' must be a list drawn from")
+  expect_error(load_rubric(mk(list(object = "p", mapping = "x"))), "param 'mapping' must map aesthetic names")
+  expect_s3_class(load_rubric(mk(list(object = "p", geom = "point", mapping = list(x = "a"), labels = "title"))), "archgrader_rubric")
+})
+
+test_that("uses_function and text_mentions parameters are validated", {
+  dir <- withr::local_tempdir()
+  mk <- function(check, params) {
+    r <- rubric_list()
+    r$criteria[[1]] <- list(id = "c", description = "C", points = 10, check = check, params = params,
+                            comments = list(pass = "a", partial = "b", fail = "c"), hint = "h")
+    write_rubric(r, dir = dir)
+  }
+  expect_error(load_rubric(mk("uses_function", list())), "needs parameter\\(s\\): functions")
+  expect_error(load_rubric(mk("uses_function", list(functions = "lm", mode = "some"))), "'mode' must be 'any' or 'all'")
+  expect_error(load_rubric(mk("uses_function", list(functoins = "lm"))), "unknown parameter\\(s\\)")
+  expect_error(load_rubric(mk("text_mentions", list(heading = "H"))), "needs parameter\\(s\\): groups")
+  expect_error(load_rubric(mk("text_mentions", list(heading = "H", groups = list("a", "b")))), "must map a group name to a list of keywords")
+  expect_s3_class(load_rubric(mk("text_mentions", list(heading = "H", groups = list(a = c("x", "y"))))), "archgrader_rubric")
+})
+
+test_that("all three packaged rubrics load and use only the six check types", {
+  for (a in c("a1", "a2", "a3")) {
+    rub <- load_rubric(system.file("rubrics", paste0(a, ".yaml"), package = "ArchGrader"))
+    expect_true(all(vapply(rub$criteria, function(cr) cr$check, "") %in% CHECK_TYPES), info = a)
+    expect_gte(length(rub$criteria), 6)
+    expect_lte(length(rub$criteria), 8)
+  }
+})

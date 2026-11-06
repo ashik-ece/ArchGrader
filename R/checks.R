@@ -24,6 +24,9 @@ run_check <- function(criterion, student, reference) {
     criterion$check,
     renders = check_renders(params, student, reference),
     value   = check_value(params, student, reference),
+    plot    = check_plot(params, student, reference),
+    uses_function = check_uses_function(params, student, reference),
+    text_mentions = check_text_mentions(params, student, reference),
     manual  = check_manual(params, student, reference),
     stop("Check type '", criterion$check, "' (criterion '", criterion$id,
          "') is not implemented yet.", call. = FALSE)
@@ -82,7 +85,7 @@ check_value <- function(params, student, reference) {
   res <- if (is.data.frame(expected)) {
     compare_table(got, expected, key, tol)
   } else if (is.numeric(expected)) {
-    compare_numeric(got, expected, tol)
+    compare_numeric(got, expected, tol, isTRUE(params$ignore_sign))
   } else {
     compare_other(got, expected)
   }
@@ -90,7 +93,7 @@ check_value <- function(params, student, reference) {
                object = obj, chunk = chunk)
 }
 
-compare_numeric <- function(got, expected, tol) {
+compare_numeric <- function(got, expected, tol, ignore_sign = FALSE) {
   observed <- describe_value(got)
   if (!is.numeric(got)) {
     return(list(credit = 0, observed = observed,
@@ -100,7 +103,16 @@ compare_numeric <- function(got, expected, tol) {
     return(list(credit = 0, observed = observed,
                 note = paste0("Expected ", length(expected), " value(s) but got ", length(got), ".")))
   }
-  ok <- numbers_match(expected, as.numeric(got), tol)
+  got <- as.numeric(got)
+  # With ignore_sign, the answer may be reported for the groups in the other
+  # order: a number is negated, and an interval is negated and reversed (a CI of
+  # 3 to 9 becomes -9 to -3). The best reading counts.
+  candidates <- list(got)
+  if (ignore_sign) {
+    candidates <- c(candidates, list(if (length(got) > 1) -rev(got) else -got))
+  }
+  oks <- lapply(candidates, function(g) numbers_match(expected, g, tol))
+  ok <- oks[[which.max(vapply(oks, sum, numeric(1)))]]
   credit <- sum(ok) / length(ok)
   note <- if (all(ok)) {
     "Matches the expected value."

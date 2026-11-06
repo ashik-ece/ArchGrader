@@ -30,13 +30,19 @@
 #'   * `timed_out`: `TRUE` if the timeout stopped the run,
 #'   * `elapsed`: seconds taken,
 #'   * `chunks`: labels of all chunks, in order,
-#'   * `code`: the extracted code as one string (for `uses_function` checks).
+#'   * `chunk_code`: named list with the code of each chunk (for
+#'     `uses_function` checks),
+#'   * `code`: all the extracted code as one string,
+#'   * `prose`: the document text outside code chunks and the YAML header, one
+#'     element per line (for `text_mentions` checks).
 #' @export
 run_submission <- function(path, data_dir = NULL, timeout = 30) {
   if (!is.character(path) || length(path) != 1 || !file.exists(path)) {
     stop("Submission file not found: ", format(path), call. = FALSE)
   }
-  chunks <- extract_chunks(path)
+  lines <- read_qmd_lines(path)
+  chunks <- extract_chunks(lines)
+  prose <- extract_prose(lines)
 
   workdir <- tempfile("archgrader-run-")
   dir.create(workdir)
@@ -99,7 +105,9 @@ run_submission <- function(path, data_dir = NULL, timeout = 30) {
     timed_out = timed_out,
     elapsed = elapsed,
     chunks = names(chunks),
-    code = paste(unlist(chunks), collapse = "\n\n")
+    chunk_code = chunks,
+    code = paste(unlist(chunks), collapse = "\n\n"),
+    prose = prose
   )
 }
 
@@ -161,15 +169,41 @@ clean_crash_message <- function(e) {
   msg
 }
 
-# Pull the R chunks out of a .qmd as an ordered, named list of code strings.
-# Names are the chunk labels.
-extract_chunks <- function(path) {
+# Read a .qmd as UTF-8 lines. Files saved by other editors are often Latin-1
+# (for example "cafe-with-accent" from a Windows machine). Anything that is not
+# valid UTF-8 is read as Latin-1, which never fails, so one odd file cannot stop
+# a batch.
+read_qmd_lines <- function(path) {
   lines <- readLines(path, warn = FALSE)
-  # Files saved by other editors are often Latin-1 (for example "cafe-with-accent" from
-  # a Windows machine). Anything that is not valid UTF-8 is read as Latin-1,
-  # which never fails, so one odd file cannot stop a batch.
   if (!all(validUTF8(lines))) lines <- iconv(lines, from = "latin1", to = "UTF-8", sub = "?")
   Encoding(lines) <- "UTF-8"
+  lines
+}
+
+# The text of a .qmd outside its code chunks and YAML header, one element per
+# line, headings included. Used by checks that read the written answer.
+extract_prose <- function(lines) {
+  keep <- logical(length(lines))
+  in_yaml <- length(lines) > 0 && grepl("^---\\s*$", lines[1])
+  in_code <- FALSE
+  for (i in seq_along(lines)) {
+    line <- lines[i]
+    if (in_yaml) {
+      if (i > 1 && grepl("^(---|\\.\\.\\.)\\s*$", line)) in_yaml <- FALSE
+      next
+    }
+    if (grepl("^\\s*(```+|~~~+)", line)) {
+      in_code <- !in_code
+      next
+    }
+    keep[i] <- !in_code
+  }
+  lines[keep]
+}
+
+# Pull the R chunks out of the lines of a .qmd as an ordered, named list of
+# code strings. Names are the chunk labels.
+extract_chunks <- function(lines) {
   lines <- move_option_labels_to_headers(lines)
 
   src <- tempfile(fileext = ".qmd")

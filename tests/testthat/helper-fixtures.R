@@ -36,8 +36,10 @@ write_rubric <- function(x, dir = withr::local_tempdir(.local_envir = parent.fra
 
 # A run result shaped like run_submission()'s, for testing checks in isolation.
 fake_run <- function(objects = list(), object_chunk = NULL, error = NULL,
-                     error_chunk = NULL, timed_out = FALSE) {
+                     error_chunk = NULL, timed_out = FALSE, chunk_code = list(),
+                     prose = character()) {
   if (is.null(object_chunk)) object_chunk <- stats::setNames(rep("chunk-a", length(objects)), names(objects))
   list(objects = objects, object_chunk = object_chunk, error = error,
-       error_chunk = error_chunk, timed_out = timed_out, elapsed = 0, chunks = "chunk-a", code = "")
+       error_chunk = error_chunk, timed_out = timed_out, elapsed = 0, chunks = "chunk-a",
+       chunk_code = chunk_code, code = paste(unlist(chunk_code), collapse = "\n\n"), prose = prose)
 }

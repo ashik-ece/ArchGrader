@@ -1,0 +1,42 @@
+---
+title: "Assignment 2: Visualizing Lithic Artifact Measurements"
+format: html
+---
+
+## Background
+
+You are working with the same 150 stone artifacts as Assignment 1 (see
+`artifacts.csv`: `artifact_id`, `site`, `raw_material`, `length_mm`,
+`width_mm`, `thickness_mm`).
+
+**How this assignment is graded.** Your figure is checked by saving it under an
+*exact object name* (given below). The grader looks at the plot object itself:
+which kind of marks it draws, which columns are mapped to which aesthetics, and
+which labels it carries. Leave the chunk labels (the name after `r` in each
+` ```{r name} ` line) as they are, because feedback points you to the chunk to
+revisit. Use `ggplot2`.
+
+```{r load-data}
+library(ggplot2)
+artifacts <- read.csv("artifacts.csv")
+```
+
+## Task 1: Length against width, by raw material
+
+Make a scatter plot of the artifacts with:
+
+- `length_mm` on the **x** axis and `width_mm` on the **y** axis,
+- one point per artifact,
+- the points **coloured by `raw_material`**,
+- axis labels that say what is measured and the unit (for example
+  "Length (mm)", not the column name),
+- a plot **title**.
+
+Save the plot as **`length_width_plot`**. Assign it with `<-`; you do not need to
+print it or save it to a file, but printing it is a good way to check your work.
+
+```{r scatter-plot}
+length_width_plot <- ggplot(artifacts, aes(length_mm, width_mm)) +
+  geom_point() +
+  labs(x = "Length (mm)", y = "Width (mm)", title = "Artifact length against width")
+```

@@ -1,0 +1,74 @@
+---
+title: "Assignment 3: Do Two Sites Differ in Artifact Length?"
+format: html
+---
+
+## Background
+
+You are working with the same 150 stone artifacts as Assignments 1 and 2. An
+archaeologist wonders whether artifacts from **River Terrace** are longer, on
+average, than artifacts from **Cave Mouth**. You will test this and explain the
+result.
+
+**How this assignment is graded.** Your numbers are checked by saving them under
+*exact object names* (given below), and your written answer is read from the
+section headed **Interpretation**. Leave the chunk labels (the name after `r` in
+each ` ```{r name} ` line) and the **Interpretation** heading as they are. Use a
+t-test (`t.test()`) or an equivalent linear model (`lm()`).
+
+The data and the two sites are already set up for you.
+
+```{r load-data}
+artifacts <- read.csv("artifacts.csv")
+two_sites <- subset(artifacts, site %in% c("River Terrace", "Cave Mouth"))
+```
+
+## Task 1: Test the difference in mean length
+
+Compare the mean `length_mm` of River Terrace and Cave Mouth artifacts in
+`two_sites`. Think of the difference as **River Terrace minus Cave Mouth**. (If
+your software gives the difference the other way round, that is fine: the grader
+accepts either order.)
+
+Save these three results, each under its exact name:
+
+- **`t_statistic`**: the test statistic (a single number)
+- **`p_value`**: the p-value (a single number)
+- **`conf_int`**: the 95% confidence interval for the difference in means (two
+  numbers: lower and upper)
+
+```{r run-test}
+river <- two_sites$length_mm[two_sites$site == "River Terrace"]
+cave <- two_sites$length_mm[two_sites$site == "Cave Mouth"]
+test_result <- suppressWarnings(wilcox.test(river, cave, conf.int = TRUE))
+t_statistic <- unname(test_result$statistic)
+p_value <- test_result$p.value
+conf_int <- as.numeric(test_result$conf.int)
+```
+
+## Task 2: Effect size
+
+Compute **Cohen's d** for the same comparison: the difference in means divided
+by the pooled standard deviation of the two groups.
+
+Save it as **`cohens_d`** (a single number).
+
+```{r effect-size}
+n1 <- length(river)
+n2 <- length(cave)
+pooled_sd <- sqrt(((n1 - 1) * var(river) + (n2 - 1) * var(cave)) / (n1 + n2 - 2))
+cohens_d <- (mean(river) - mean(cave)) / pooled_sd
+```
+
+## Task 3: Explain your result
+
+In a short paragraph, in plain language, explain what you found: which site has
+longer artifacts and by roughly how much, whether the difference is statistically
+convincing, and how large the difference is in practical terms. Report the effect
+size and say what it means.
+
+Write your paragraph under the heading below.
+
+## Interpretation
+
+River Terrace artifacts are longer than Cave Mouth artifacts (p < 0.001). The effect size is large, Cohen's d about 1.0.

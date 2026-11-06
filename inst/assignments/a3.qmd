@@ -1,0 +1,68 @@
+---
+title: "Assignment 3: Do Two Sites Differ in Artifact Length?"
+format: html
+---
+
+## Background
+
+You are working with the same 150 stone artifacts as Assignments 1 and 2. An
+archaeologist wonders whether artifacts from **River Terrace** are longer, on
+average, than artifacts from **Cave Mouth**. You will test this and explain the
+result.
+
+**How this assignment is graded.** Your numbers are checked by saving them under
+*exact object names* (given below), and your written answer is read from the
+section headed **Interpretation**. Leave the chunk labels (the name after `r` in
+each ` ```{r name} ` line) and the **Interpretation** heading as they are. Use a
+t-test (`t.test()`) or an equivalent linear model (`lm()`).
+
+The data and the two sites are already set up for you.
+
+```{r load-data}
+artifacts <- read.csv("artifacts.csv")
+two_sites <- subset(artifacts, site %in% c("River Terrace", "Cave Mouth"))
+```
+
+## Task 1: Test the difference in mean length
+
+Compare the mean `length_mm` of River Terrace and Cave Mouth artifacts in
+`two_sites`. Think of the difference as **River Terrace minus Cave Mouth**. (If
+your software gives the difference the other way round, that is fine: the grader
+accepts either order.)
+
+Save these three results, each under its exact name:
+
+- **`t_statistic`**: the test statistic (a single number)
+- **`p_value`**: the p-value (a single number)
+- **`conf_int`**: the 95% confidence interval for the difference in means (two
+  numbers: lower and upper)
+
+```{r run-test}
+t_statistic <- NULL  # replace NULL with your code
+p_value <- NULL      # replace NULL with your code
+conf_int <- NULL     # replace NULL with your code
+```
+
+## Task 2: Effect size
+
+Compute **Cohen's d** for the same comparison: the difference in means divided
+by the pooled standard deviation of the two groups.
+
+Save it as **`cohens_d`** (a single number).
+
+```{r effect-size}
+cohens_d <- NULL  # replace NULL with your code
+```
+
+## Task 3: Explain your result
+
+In a short paragraph, in plain language, explain what you found: which site has
+longer artifacts and by roughly how much, whether the difference is statistically
+convincing, and how large the difference is in practical terms. Report the effect
+size and say what it means.
+
+Write your paragraph under the heading below.
+
+## Interpretation
+
+*(Write your interpretation here, replacing this line.)*

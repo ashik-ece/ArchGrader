@@ -42,8 +42,36 @@ the rubric.
 Chunk labels: `load-data`, `overall-stats`, `median-by-site`,
 `count-by-material`, `summary-table`.
 
-Assignments 2 (data visualization) and 3 (statistical reasoning) will add
-their objects here when they are written in Phase 4.
+## Assignment 2: data visualization (`inst/assignments/a2.qmd`)
+
+| Object | Type | Task |
+|---|---|---|
+| `length_width_plot` | ggplot | Scatter plot of `length_mm` (x) against `width_mm` (y), points coloured by `raw_material`, with descriptive axis labels and a title |
+
+Chunk labels: `load-data` (which also calls `library(ggplot2)`), `scatter-plot`.
+Students assign the plot with `<-`; auto-printing is not enough, because the
+grader inspects the saved object.
+
+## Assignment 3: statistical reasoning (`inst/assignments/a3.qmd`)
+
+The task compares River Terrace with Cave Mouth. `load-data` also creates
+`two_sites`, the subset of `artifacts` for those two sites.
+
+| Object | Type | Task |
+|---|---|---|
+| `t_statistic` | number | Test statistic for the difference in mean `length_mm` |
+| `p_value` | number | p-value of the same test |
+| `conf_int` | numeric vector, length 2 | 95% confidence interval for the difference (lower, upper) |
+| `cohens_d` | number | Effect size |
+
+Chunk labels: `load-data`, `run-test`, `effect-size`.
+
+The written answer goes under a heading named exactly `## Interpretation`.
+**Rule for any text-checked section:** the section must be empty apart from a
+placeholder line in the template. If the instructions that sit under the
+heading mention the keywords the rubric looks for, an empty answer would earn
+credit. In A3 the instructions live in a separate "Task 3" section for this
+reason (see the disagreement log).
 
 ## The dataset (`inst/assignments/artifacts.csv`)
 

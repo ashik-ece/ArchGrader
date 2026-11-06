@@ -23,7 +23,7 @@ test_that("the hand-made broken copies score exactly what was predicted beforeha
   key <- read.csv(system.file("mock_submissions", "expected_scores.csv", package = "ArchGrader"))
   planted <- read.csv(system.file("mock_submissions", "planted_mistakes.csv", package = "ArchGrader"),
                       na.strings = character())
-  for (sub in unique(key$submission[key$assignment == "a1"])) {
+  for (sub in c("a1_wrong_mean", "a1_missing_object", "a1_error_in_chunk", "a1_partial_table")) {
     r <- grade_submission(file.path(mock_dir(), paste0(sub, ".qmd")))
     want <- key[key$submission == sub, ]
     got <- stats::setNames(r$table$earned, r$table$id)

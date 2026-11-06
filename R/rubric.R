@@ -5,14 +5,18 @@
 #' @noRd
 CHECK_TYPES <- c("renders", "value", "plot", "uses_function", "text_mentions", "manual")
 
-# Parameters accepted by each check type that is implemented. Types that are
-# listed in CHECK_TYPES but not yet implemented (plot, uses_function,
-# text_mentions) are not parameter-checked until they are built.
+# Parameters accepted by each check type.
 CHECK_PARAMS <- list(
-  renders = list(required = character(), optional = character()),
-  value   = list(required = c("object", "tolerance"), optional = "key"),
-  manual  = list(required = character(), optional = character())
+  renders       = list(required = character(), optional = character()),
+  value         = list(required = c("object", "tolerance"), optional = c("key", "ignore_sign")),
+  plot          = list(required = "object", optional = c("geom", "mapping", "labels")),
+  uses_function = list(required = "functions", optional = "mode"),
+  text_mentions = list(required = c("heading", "groups"), optional = character()),
+  manual        = list(required = character(), optional = character())
 )
+
+# Plot labels a rubric may ask for ("color" is accepted and means "colour").
+PLOT_LABEL_KEYS <- c("x", "y", "title", "subtitle", "caption", "colour", "color", "fill")
 
 RUBRIC_TOP_REQUIRED <- c("assignment", "title", "solution", "total_points", "criteria")
 RUBRIC_TOP_OPTIONAL <- "timeout"
@@ -48,7 +52,7 @@ load_rubric <- function(path) {
     stop("Rubric file not found: ", format(path), call. = FALSE)
   }
   raw <- tryCatch(
-    yaml::read_yaml(path),
+    yaml::read_yaml(path, handlers = list("bool#yes" = yaml_bool, "bool#no" = yaml_bool)),
     error = function(e) {
       stop("Rubric '", basename(path), "' is not valid YAML: ",
            conditionMessage(e), call. = FALSE)
@@ -69,6 +73,14 @@ load_rubric <- function(path) {
   })
   raw$path <- normalizePath(path)
   structure(raw, class = "archgrader_rubric")
+}
+
+# YAML 1.1 reads a bare y, n, yes, no, on or off as a boolean. That would turn
+# the plot aesthetic `y` into the key TRUE, or the keyword "no" into FALSE,
+# without any error. Only true and false are booleans in a rubric; everything
+# else stays the text it obviously is.
+yaml_bool <- function(x) {
+  if (tolower(x) %in% c("true", "false")) as.logical(toupper(x)) else x
 }
 
 # Returns a character vector of problems; empty means the rubric is valid.
@@ -147,7 +159,7 @@ validate_rubric <- function(x) {
     }
 
     # params, for check types that are implemented
-    if (check_ok && check %in% names(CHECK_PARAMS)) {
+    if (check_ok) {
       spec <- CHECK_PARAMS[[check]]
       params <- cr$params
       if (!is.null(params) && (!is.list(params) || (length(params) > 0 && is.null(names(params))))) {
@@ -170,6 +182,10 @@ validate_rubric <- function(x) {
         if ("key" %in% have && !(is.character(unlist(params$key)) && length(params$key) >= 1)) {
           cadd("param 'key' must be a column name or a list of column names")
         }
+        if ("ignore_sign" %in% have && !is.logical(params$ignore_sign)) {
+          cadd("param 'ignore_sign' must be true or false")
+        }
+        for (msg in type_param_problems(check, params)) cadd(msg)
       }
     }
 
@@ -208,6 +224,57 @@ validate_rubric <- function(x) {
   }
 
   problems
+}
+
+# Extra checks on the parameters of the newer check types.
+type_param_problems <- function(check, params) {
+  out <- character()
+  if (check == "plot") {
+    wanted <- intersect(c("geom", "mapping", "labels"), names(params))
+    if (length(wanted) == 0) {
+      out <- c(out, "check 'plot' needs at least one of: geom, mapping, labels")
+    }
+    if ("geom" %in% names(params) && !all_strings(params$geom)) {
+      out <- c(out, "param 'geom' must be a geometry name such as point, or a list of names")
+    }
+    if ("mapping" %in% names(params)) {
+      m <- params$mapping
+      if (!is.list(m) || length(m) == 0 || is.null(names(m)) || !all(vapply(m, is_string, logical(1)))) {
+        out <- c(out, "param 'mapping' must map aesthetic names to variable names, for example x: length_mm")
+      }
+    }
+    if ("labels" %in% names(params)) {
+      keys <- unlist(params$labels)
+      if (!all_strings(keys) || !all(keys %in% PLOT_LABEL_KEYS)) {
+        out <- c(out, paste0("param 'labels' must be a list drawn from: ", paste(PLOT_LABEL_KEYS, collapse = ", ")))
+      }
+    }
+  }
+  if (check == "uses_function") {
+    if ("functions" %in% names(params) && !all_strings(params$functions)) {
+      out <- c(out, "param 'functions' must be a list of function names")
+    }
+    if ("mode" %in% names(params) && !(is_string(params$mode) && params$mode %in% c("any", "all"))) {
+      out <- c(out, "param 'mode' must be 'any' or 'all'")
+    }
+  }
+  if (check == "text_mentions") {
+    if ("heading" %in% names(params) && !is_string(params$heading)) {
+      out <- c(out, "param 'heading' must be non-empty text")
+    }
+    g <- params$groups
+    if ("groups" %in% names(params) &&
+        (!is.list(g) || length(g) == 0 || is.null(names(g)) || any(!nzchar(names(g))) ||
+         !all(vapply(g, all_strings, logical(1))))) {
+      out <- c(out, "param 'groups' must map a group name to a list of keywords, for example effect_size: [effect size, cohen]")
+    }
+  }
+  out
+}
+
+all_strings <- function(x) {
+  x <- unlist(x)
+  is.character(x) && length(x) >= 1 && !anyNA(x) && all(nzchar(trimws(x)))
 }
 
 add_placeholder_problems <- function(text, where, add) {

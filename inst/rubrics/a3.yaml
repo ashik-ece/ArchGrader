@@ -1,0 +1,115 @@
+# Rubric for Assignment 3: statistical reasoning (River Terrace vs Cave Mouth).
+#
+# Numbers are compared to the instructor solution within a tolerance, and
+# ignore_sign accepts the difference taken in either order (a statistic of 4.25
+# or -4.25; an interval of 3.5 to 9.6 or -9.6 to -3.5). Welch and equal-variance
+# tests agree to well within these tolerances, so lm() and t.test(var.equal=TRUE)
+# are accepted. The written answer is checked by keyword only; reasoning quality
+# is left to the TA (manual). Placeholders: {object}, {observed}, {expected},
+# {chunk}.
+
+assignment: a3
+title: "Assignment 3: Do Two Sites Differ in Artifact Length?"
+solution: a3_solution.qmd
+timeout: 30
+total_points: 100
+
+criteria:
+  - id: renders
+    description: "The document runs from top to bottom without errors"
+    points: 10
+    check: renders
+    comments:
+      pass: "Your code ran from top to bottom without errors."
+      partial: "Part of your code ran, but it did not finish."
+      fail: "Your code stopped with an error in chunk `{chunk}`: {observed}"
+    hint: "Fix the error in chunk `{chunk}` first. Code after an error does not run, so the results after it cannot be checked."
+
+  - id: t_statistic
+    description: "Test statistic for the difference in mean length"
+    points: 10
+    check: value
+    params:
+      object: t_statistic
+      tolerance: 0.05
+      ignore_sign: true
+    comments:
+      pass: "Correct: `{object}` is {observed}."
+      partial: "`{object}` is partly right: {observed}; expected {expected}."
+      fail: "`{object}` is {observed}, but the expected value is {expected} (the sign may be reversed if you took the groups in the other order)."
+    hint: "Compare River Terrace with Cave Mouth using a two-sample t-test and save its test statistic as `{object}`. Check chunk `{chunk}`."
+
+  - id: p_value
+    description: "p-value for the test"
+    points: 10
+    check: value
+    params:
+      object: p_value
+      tolerance: 0.0001
+    comments:
+      pass: "Correct: `{object}` is {observed}."
+      partial: "`{object}` is partly right: {observed}; expected {expected}."
+      fail: "`{object}` is {observed}, but the expected value is {expected}."
+    hint: "Take the p-value from the same test as the statistic and save it as `{object}`. Check chunk `{chunk}`."
+
+  - id: conf_int
+    description: "95% confidence interval for the difference in means"
+    points: 15
+    check: value
+    params:
+      object: conf_int
+      tolerance: 0.1
+      ignore_sign: true
+    comments:
+      pass: "Correct: `{object}` is {observed}."
+      partial: "`{object}` is partly right: {observed}; expected {expected}."
+      fail: "`{object}` is {observed}, but the expected interval is {expected}."
+    hint: "Save the two ends of the 95% confidence interval for the difference in means as `{object}` (lower, then upper). Check chunk `{chunk}`."
+
+  - id: cohens_d
+    description: "Effect size (Cohen's d)"
+    points: 15
+    check: value
+    params:
+      object: cohens_d
+      tolerance: 0.02
+      ignore_sign: true
+    comments:
+      pass: "Correct: `{object}` is {observed}."
+      partial: "`{object}` is partly right: {observed}; expected {expected}."
+      fail: "`{object}` is {observed}, but the expected value is {expected}."
+    hint: "Cohen's d is the difference in means divided by the pooled standard deviation of the two groups. Save it as `{object}`. Check chunk `{chunk}`."
+
+  - id: method
+    description: "Used a t-test or a linear model"
+    points: 10
+    check: uses_function
+    params:
+      functions: [t.test, lm]
+      mode: any
+    comments:
+      pass: "Correct: you used a t-test or a linear model, as the task asks."
+      partial: "You used part of the required method."
+      fail: "The task asks for a t-test or an equivalent linear model."
+    hint: "Use `t.test()` (or `lm()` with site as the predictor) to compare the two sites."
+
+  - id: interpretation
+    description: "The interpretation reports the effect size and states a plain-language conclusion"
+    points: 20
+    check: text_mentions
+    params:
+      heading: Interpretation
+      groups:
+        effect_size: ["effect size", "cohen"]
+        conclusion: [longer, shorter, larger, smaller, bigger, greater, differ]
+    comments:
+      pass: "Correct: your interpretation reports the effect size and states a conclusion in plain language."
+      partial: "Your interpretation covers some of what is asked, but not all of it."
+      fail: "Your interpretation does not cover what the task asks for."
+    hint: "Under the heading Interpretation, say which site has longer artifacts and by how much, and report the effect size (Cohen's d) and what it means."
+
+  - id: reasoning
+    description: "Quality of the reasoning in the interpretation"
+    points: 10
+    check: manual
+    hint: "Does the writer separate statistical significance from practical size? Is the conclusion supported by the numbers reported, and not overstated?"

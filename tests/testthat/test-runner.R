@@ -127,3 +127,17 @@ test_that("the extracted code is returned for code checks", {
   p <- write_qmd(c(a = "m <- t.test(c(1,2,3))"))
   expect_match(run_submission(p)$code, "t.test", fixed = TRUE)
 })
+
+test_that("the run exposes each chunk's code and the prose outside code", {
+  p <- write_qmd(c(first = "a <- 1", second = "b <- a + 1"))
+  lines <- readLines(p)
+  lines <- c(lines, "## Interpretation", "", "My written answer.")
+  writeLines(lines, p)
+  r <- run_submission(p)
+  expect_equal(names(r$chunk_code), c("first", "second"))
+  expect_equal(trimws(r$chunk_code$second), "b <- a + 1")
+  expect_true("## Interpretation" %in% r$prose)
+  expect_true("My written answer." %in% r$prose)
+  expect_false(any(grepl("a <- 1", r$prose, fixed = TRUE)))
+  expect_false(any(grepl("title: test", r$prose, fixed = TRUE)))
+})

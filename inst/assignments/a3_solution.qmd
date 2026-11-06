@@ -1,0 +1,41 @@
+---
+title: "Assignment 3: Do Two Sites Differ in Artifact Length? (Instructor Solution)"
+format: html
+---
+
+Instructor solution. The grader runs this file once and uses it to confirm the
+rubric's object names. Do not hand this file out. See `docs/conventions.md`.
+
+```{r load-data}
+artifacts <- read.csv("artifacts.csv")
+two_sites <- subset(artifacts, site %in% c("River Terrace", "Cave Mouth"))
+```
+
+## Task 1: Test the difference in mean length
+
+```{r run-test}
+river <- two_sites$length_mm[two_sites$site == "River Terrace"]
+cave <- two_sites$length_mm[two_sites$site == "Cave Mouth"]
+
+ttest_result <- t.test(river, cave)   # Welch two-sample t-test
+t_statistic <- unname(ttest_result$statistic)
+p_value <- ttest_result$p.value
+conf_int <- as.numeric(ttest_result$conf.int)
+```
+
+## Task 2: Effect size
+
+```{r effect-size}
+sd_pooled <- sqrt(((length(river) - 1) * var(river) + (length(cave) - 1) * var(cave)) /
+                    (length(river) + length(cave) - 2))
+cohens_d <- (mean(river) - mean(cave)) / sd_pooled
+```
+
+## Interpretation
+
+River Terrace artifacts are about 6.5 mm longer than Cave Mouth artifacts on
+average (42.1 mm against 35.6 mm). A Welch two-sample t-test gives t = 4.25 and
+p < 0.001, with a 95% confidence interval for the difference of about 3.5 to
+9.6 mm, so the difference is very unlikely to be due to chance alone. The effect
+size is large (Cohen's d is about 1.0): the average River Terrace artifact is
+roughly one standard deviation longer than the average Cave Mouth artifact.

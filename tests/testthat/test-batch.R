@@ -3,7 +3,8 @@ mock_dir <- function() system.file("mock_submissions", "a1", package = "ArchGrad
 # A folder with the four mocks, a copy of the solution, and three awkward files.
 make_batch_folder <- function(awkward = TRUE) {
   d <- withr::local_tempdir(.local_envir = parent.frame())
-  file.copy(list.files(mock_dir(), full.names = TRUE), d)
+  four <- c("a1_error_in_chunk", "a1_missing_object", "a1_partial_table", "a1_wrong_mean")
+  file.copy(file.path(mock_dir(), paste0(four, ".qmd")), d)
   file.copy(system.file("assignments", "a1_solution.qmd", package = "ArchGrader"),
             file.path(d, "b_solution_copy.qmd"))
   if (awkward) {

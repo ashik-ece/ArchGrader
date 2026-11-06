@@ -14,13 +14,14 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Suggests: 
     dplyr,
-    ggplot2,
     rmarkdown,
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3
 Imports: 
     callr,
+    ggplot2,
     knitr,
     quarto,
+    rlang,
     yaml

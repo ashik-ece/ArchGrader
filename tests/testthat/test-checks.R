@@ -159,9 +159,9 @@ test_that("manual gives no credit and asks for review", {
   expect_match(r$note, "TA review")
 })
 
-test_that("run_check dispatches, and unimplemented types fail loudly", {
+test_that("run_check dispatches, and an unknown type fails loudly", {
   cr <- list(id = "a", check = "renders", params = list())
   expect_equal(run_check(cr, fake_run(), ref)$credit, 1)
-  cr <- list(id = "p", check = "plot", params = list())
+  cr <- list(id = "p", check = "teleport", params = list())
   expect_error(run_check(cr, fake_run(), ref), "not implemented yet")
 })

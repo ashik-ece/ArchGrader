@@ -25,7 +25,11 @@ changed each object,
 \item \code{timed_out}: \code{TRUE} if the timeout stopped the run,
 \item \code{elapsed}: seconds taken,
 \item \code{chunks}: labels of all chunks, in order,
-\item \code{code}: the extracted code as one string (for \code{uses_function} checks).
+\item \code{chunk_code}: named list with the code of each chunk (for
+\code{uses_function} checks),
+\item \code{code}: all the extracted code as one string,
+\item \code{prose}: the document text outside code chunks and the YAML header, one
+element per line (for \code{text_mentions} checks).
 }
 }
 \description{
