@@ -1,6 +1,13 @@
-# Placeholder CI: installs R and Quarto and runs the testthat suite.
-# Phase 5 extends this to grade the sample submissions and fail the build if
-# the scores differ from inst/mock_submissions/expected_scores.csv.
+# Continuous integration for ArchGrader.
+#
+# 1. R CMD check, which also runs the whole testthat suite.
+# 2. The regression gate: data-raw/make_summary.R grades all 30 mock submissions
+#    and exits non-zero if any score differs from the hand-derived answer key
+#    (inst/mock_submissions/expected_scores.csv), if an error is reported at the
+#    wrong chunk, or if test coverage falls below 80%.
+#
+# The summary it writes (results/summary.md) is shown on the run's page and kept
+# as a downloadable artifact.
 name: CI
 
 on:
@@ -10,9 +17,17 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
+  check:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
     steps:
       - uses: actions/checkout@v4
 
@@ -24,9 +39,24 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::devtools, any::testthat
+          extra-packages: any::rcmdcheck, any::devtools, any::covr
           needs: check
 
-      - name: Run tests
-        run: devtools::test(stop_on_failure = TRUE)
-        shell: Rscript {0}
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          error-on: '"warning"'
+
+      - name: Grade the mock submissions and compare with the answer key
+        run: Rscript data-raw/make_summary.R
+
+      - name: Show the summary on the run page
+        if: always()
+        run: |
+          if [ -f results/summary.md ]; then cat results/summary.md >> "$GITHUB_STEP_SUMMARY"; fi
+
+      - name: Keep the results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results
+          path: results/

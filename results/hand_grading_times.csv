@@ -1,0 +1,11 @@
+assignment,submission,minutes
+a1,a1_wrong_mean,
+a1,a1_partial_table,
+a1,a1_error_in_chunk,
+a1,a1_alt_base_r,
+a2,a2_half_labeled,
+a2,a2_wrong_mapping,
+a2,a2_alt_jitter,
+a3,a3_wrong_test_wilcox,
+a3,a3_omits_effect_size,
+a3,a3_alt_lm,
